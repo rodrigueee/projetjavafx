@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+
+<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projet.controleurs.MenuControleur">
+    <children>
+      <MenuBar prefWidth="755.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <menus>
+    <Menu mnemonicParsing="false" text="Médicament">
+         <items>
+            <MenuItem mnemonicParsing="false" onAction="#medic" text="Ouvrir" />
+         </items></Menu>
+    <Menu mnemonicParsing="false" text="Edit">
+      <items>
+        <MenuItem mnemonicParsing="false" text="Delete" />
+      </items>
+    </Menu>
+    <Menu mnemonicParsing="false" text="Help">
+      <items>
+        <MenuItem mnemonicParsing="false" text="About" />
+      </items>
+    </Menu>
+  </menus>
+</MenuBar>
+      <Text layoutX="339.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Projet Java FX" textAlignment="CENTER" />
+      <Text layoutX="46.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Crombez Rodrigue" />
+      <Text layoutX="662.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HEPH" />
+   </children>
+</AnchorPane>
