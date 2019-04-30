@@ -6,6 +6,10 @@
 package projet.metier;
 
 import java.util.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -17,6 +21,7 @@ public class Medicament {
      * id unique du medicament
      */
     private int idmedic;
+    private final IntegerProperty idMedic;
     /**
      * nom du medicament
      */
@@ -29,11 +34,13 @@ public class Medicament {
      * code du medicament
      */
     private String code;
+    private final StringProperty codeProp;
 
     /**
      * constructeur par defaut
      */
     public Medicament() {
+        this(0, null, null, null);
     }
 
     /**
@@ -49,6 +56,8 @@ public class Medicament {
         this.nom = nom;
         this.description = description;
         this.code = code;
+        this.idMedic = new SimpleIntegerProperty(idmedic);
+        this.codeProp = new SimpleStringProperty(code);
     }
 
     /**
@@ -63,6 +72,8 @@ public class Medicament {
         this.nom = nom;
         this.description = description;
         this.code = code;
+        this.idMedic = new SimpleIntegerProperty(0);
+        this.codeProp = new SimpleStringProperty(code);
     }
 
     /**
@@ -72,6 +83,8 @@ public class Medicament {
      */
     public Medicament(String code) {
         this.code = code;
+        this.idMedic = new SimpleIntegerProperty(0);
+        this.codeProp = new SimpleStringProperty(code);
     }
 
     /**
@@ -140,6 +153,16 @@ public class Medicament {
     public void setIdmedic(int idmedic) {
         this.idmedic = idmedic;
     }
+
+     public int getIdMedicProp() {
+        return idMedic.get();
+    }
+
+     public String getCodeProp() {
+        return codeProp.get();
+    }
+
+    
 
     /**
      * affiche du textes et les valeurs des variables

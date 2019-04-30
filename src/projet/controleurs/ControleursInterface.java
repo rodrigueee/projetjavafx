@@ -39,8 +39,12 @@
  */ 
 package projet.controleurs;
 
+import projet.modele.ModeleDAO;
+
 public interface ControleursInterface {
     
     //This method will allow the injection of the Parent ScreenPane
-    public void setMainControleur(MainControleur mainControleur);
+    void setMainControleur(MainControleur mainControleur);
+    
+    void setMod(ModeleDAO mod);
 }

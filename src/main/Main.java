@@ -1,74 +1,69 @@
-/*
- * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
- *
- * Copyright (c) 2013 Oracle and/or its affiliates. All rights reserved.
- *
- * The contents of this file are subject to the terms of either the GNU
- * General Public License Version 2 only ("GPL") or the Common Development
- * and Distribution License("CDDL") (collectively, the "License"). You
- * may not use this file except in compliance with the License. You can
- * obtain a copy of the License at
- * https://glassfish.dev.java.net/public/CDDL+GPL_1_1.html
- * or packager/legal/LICENSE.txt.  See the License for the specific
- * language governing permissions and limitations under the License.
- *
- * When distributing the software, include this License Header Notice in each
- * file and include the License file at packager/legal/LICENSE.txt.
- *
- * GPL Classpath Exception:
- * Oracle designates this particular file as subject to the "Classpath"
- * exception as provided by Oracle in the GPL Version 2 section of the License
- * file that accompanied this code.
- *
- * Modifications:
- * If applicable, add the following below the License Header, with the fields
- * enclosed by brackets [] replaced by your own identifying information:
- * "Portions Copyright [year] [name of copyright owner]"
- *
- * Contributor(s):
- * If you wish your version of this file to be governed by only the CDDL or
- * only the GPL Version 2, indicate your decision by adding "[Contributor]
- * elects to include this software in this distribution under the [CDDL or GPL
- * Version 2] license."  If you don't indicate a single choice of license, a
- * recipient has the option to distribute your version of this file under
- * either the CDDL, the GPL Version 2 or to extend the choice of license to
- * its licensees as provided above.  However, if you add GPL Version 2 code
- * and therefore, elected the GPL Version 2 license, then the option applies
- * only if the new code is made subject to such option by the copyright
- * holder.
- */ 
-
 package main;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import projet.controleurs.MainControleur;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import myconnections.DBConnection;
+import projet.modele.ModeleDAO;
 
 public class Main extends Application {
-    
+
     public static String mainId = "main";
     private static String mainFile = "/projet/vues/Main.fxml";
     public static String medicId = "medicament";
     private static String medicFile = "/projet/vues/Medicament.fxml";
-    
-    
+    public static String medecId = "medecin";
+    private static String medecFile = "/projet/vues/Medecin.fxml";
+    public static String patId = "patient";
+    private static String patFile = "/projet/vues/Patient.fxml";
+    public static String prescId = "prescription";
+    private static String prescFile = "/projet/vues/Prescription.fxml";
+
     @Override
     public void start(Stage primaryStage) {
         
-        MainControleur mainContainer = new MainControleur();
-        mainContainer.loadScreen(mainId, mainFile);
-        mainContainer.loadScreen(medicId, medicFile);
-        
-        mainContainer.setScreen(mainId);
-        
+        Connection cnx = DBConnection.getConnection();
+        if (cnx == null) {
+            try {
+                stop();
+            } catch(Exception e) {
+                System.out.println("Erreur de fermeture de l'application " + e.getMessage());
+            }
+        }
+        MainControleur mainControleur = new MainControleur();
+        ModeleDAO mod = ModeleDAO.getInstance(cnx);
+        mainControleur.setMod(mod);
+        mainControleur.loadScreen(mainId, mainFile);
+        mainControleur.loadScreen(medicId, medicFile);
+        mainControleur.loadScreen(medecId, medecFile);
+        mainControleur.loadScreen(patId, patFile);
+        mainControleur.loadScreen(prescId, prescFile);
+
+        mainControleur.setScreen(mainId);
+
         Group root = new Group();
-        root.getChildren().addAll(mainContainer);
+        root.getChildren().addAll(mainControleur);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
+        
+        // Evenement de fermeture de fenetre, ferme la connexion a la bdd et l'application
+        primaryStage.setOnCloseRequest((WindowEvent event) -> {
+         try {
+            cnx.close();
+            stop();
+         } catch(SQLException e) {
+             System.out.println("Erreur de fermeture de la bdd " + e.getMessage());
+         } catch(Exception e) {
+             System.out.println("Erreur de fermeture de l'application " + e.getMessage());
+         }
+        });
     }
 
     /**

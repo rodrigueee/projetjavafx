@@ -5,10 +5,45 @@
  */
 package projet.controleurs;
 
+import javafx.fxml.FXML;
+import main.Main;
+import projet.modele.ModeleDAO;
+
 /**
  *
  * @author rodri
  */
-public class PrescriptionControleur {
-    
+public class PrescriptionControleur implements ControleursInterface {
+
+    MainControleur mainControleur;
+
+    @Override
+    public void setMainControleur(MainControleur mainControleur) {
+        this.mainControleur = mainControleur;
+    }
+
+    @FXML
+    public void accueil() {
+        mainControleur.setScreen(Main.mainId);
+    }
+
+    @FXML
+    public void medic() {
+        mainControleur.setScreen(Main.medicId);
+    }
+
+    @FXML
+    public void medec() {
+        mainControleur.setScreen(Main.medecId);
+    }
+
+    @FXML
+    public void pat() {
+        mainControleur.setScreen(Main.patId);
+    }
+
+    @Override
+    public void setMod(ModeleDAO mod) {
+    }
+
 }

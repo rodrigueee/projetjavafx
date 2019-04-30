@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Text?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="projet.controleurs.MenuControleur">
     <children>
@@ -14,20 +17,34 @@
          <items>
             <MenuItem mnemonicParsing="false" onAction="#medic" text="Ouvrir" />
          </items></Menu>
-    <Menu mnemonicParsing="false" text="Edit">
+    <Menu mnemonicParsing="false" text="Medecin">
       <items>
-        <MenuItem mnemonicParsing="false" text="Delete" />
+        <MenuItem mnemonicParsing="false" onAction="#medec" text="Ouvrir" />
       </items>
     </Menu>
-    <Menu mnemonicParsing="false" text="Help">
+    <Menu mnemonicParsing="false" text="Patient">
       <items>
-        <MenuItem mnemonicParsing="false" text="About" />
+        <MenuItem mnemonicParsing="false" onAction="#pat" text="Ouvrir" />
       </items>
     </Menu>
+            <Menu mnemonicParsing="false" text="Prescription">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#presc" text="Ouvrir" />
+              </items>
+            </Menu>
   </menus>
 </MenuBar>
-      <Text layoutX="339.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Projet Java FX" textAlignment="CENTER" />
+      <ImageView fitHeight="208.0" fitWidth="271.0" layoutX="242.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/pharm.jpg" />
+         </image>
+      </ImageView>
+      <Text layoutX="262.0" layoutY="333.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Projet Java FX" textAlignment="CENTER">
+         <font>
+            <Font size="38.0" />
+         </font></Text>
       <Text layoutX="46.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Crombez Rodrigue" />
-      <Text layoutX="662.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="HEPH" />
+      <Text layoutX="633.0" layoutY="499.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" HEPH" />
+      <Text layoutX="622.0" layoutY="516.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Condorcet" />
    </children>
 </AnchorPane>
