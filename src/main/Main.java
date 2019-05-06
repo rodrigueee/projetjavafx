@@ -11,27 +11,61 @@ import javafx.stage.WindowEvent;
 import myconnections.DBConnection;
 import projet.modele.ModeleDAO;
 
+/**
+ * classe principale de l'app(main)
+ *
+ * @author rodri
+ */
+//Gaëtan m'a fait un cours sur JAVAFX (bases)
 public class Main extends Application {
 
+    /**
+     * l'id de l'ecran d'accueil
+     */
     public static String mainId = "main";
+    /**
+     * fichier d'ecran d'accueil
+     */
     private static String mainFile = "/projet/vues/Main.fxml";
+
+    /**
+     * id de l'ecran du medicament
+     */
     public static String medicId = "medicament";
+    /**
+     * fichier de l'ecran du medicament
+     */
     private static String medicFile = "/projet/vues/Medicament.fxml";
+
     public static String medecId = "medecin";
     private static String medecFile = "/projet/vues/Medecin.fxml";
+
     public static String patId = "patient";
     private static String patFile = "/projet/vues/Patient.fxml";
+
     public static String prescId = "prescription";
     private static String prescFile = "/projet/vues/Prescription.fxml";
+    /**
+     * titre de l'app
+     */
+    public static String title = "Gestion Pharmacie - Projet JavaFX";
 
+    /**
+     * methode qui demarre l'application
+     * etablie la connexion a la BDD 
+     * charge les ecrans via le controleur principale
+     * affiche l'ecran d'accueil et configure la fenetre de l'application
+     * a la fermeture de l'application, ferme la BDD
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
-        
+
         Connection cnx = DBConnection.getConnection();
         if (cnx == null) {
             try {
                 stop();
-            } catch(Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur de fermeture de l'application " + e.getMessage());
             }
         }
@@ -49,20 +83,21 @@ public class Main extends Application {
         Group root = new Group();
         root.getChildren().addAll(mainControleur);
         Scene scene = new Scene(root);
+        primaryStage.setTitle(title);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
-        
+
         // Evenement de fermeture de fenetre, ferme la connexion a la bdd et l'application
         primaryStage.setOnCloseRequest((WindowEvent event) -> {
-         try {
-            cnx.close();
-            stop();
-         } catch(SQLException e) {
-             System.out.println("Erreur de fermeture de la bdd " + e.getMessage());
-         } catch(Exception e) {
-             System.out.println("Erreur de fermeture de l'application " + e.getMessage());
-         }
+            try {
+                cnx.close();
+                stop();
+            } catch (SQLException e) {
+                System.out.println("Erreur de fermeture de la bdd " + e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Erreur de fermeture de l'application " + e.getMessage());
+            }
         });
     }
 

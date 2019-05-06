@@ -6,6 +6,8 @@
 package projet.modele;
 
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import projet.DAO.InformationsDAO;
 import projet.DAO.MedecinDAO;
@@ -73,8 +75,9 @@ public class ModeleDAO {
      *
      * @param desc description du medicament
      * @return la liste des médicaments correspondant a la description
+     * @throws java.sql.SQLException
      */
-    public List<Medicament> getMedic(String desc) {
+    public List<Medicament> getMedic(String desc) throws SQLException {
         return medicDAO.read(desc);
     }
 
@@ -113,15 +116,10 @@ public class ModeleDAO {
      * envoie l'objet dans dao qui l'ajoute dans le BD
      *
      * @param md objet à inserer dans la BD
-     * @return retourne le resultat
+     * @throws java.sql.SQLException
      */
-    public String ajouterMedic(Medicament md) {
-        Medicament m = medicDAO.create(md);
-        if (m != null) {
-            return "Médicament créé";
-            
-        }
-        return "Medicament non crée";
+    public void ajouterMedic(Medicament md) throws SQLException {
+        medicDAO.create(md);
     }
 
     /**
@@ -184,8 +182,9 @@ public class ModeleDAO {
      *
      * @param idMedic id du médicament
      * @return retourne l'objet trouvé
+     * @throws java.sql.SQLException
      */
-    public Medicament getMedicId(int idMedic) {
+    public Medicament getMedicId(int idMedic) throws SQLException {
         return medicDAO.read(idMedic);
     }
 
@@ -213,10 +212,10 @@ public class ModeleDAO {
      * supprime l'objet dans la BD
      *
      * @param medicSup objet à supprimer dans la BD
-     * @return retourne le resultat de la suppression
+     * @throws java.sql.SQLException
      */
-    public String suppMedic(Medicament medicSup) {
-        return medicDAO.delete(medicSup);
+    public void suppMedic(Medicament medicSup) throws SQLException {
+        medicDAO.delete(medicSup);
     }
 
     /**
@@ -243,10 +242,9 @@ public class ModeleDAO {
      * modifie le medicament dans le BD
      *
      * @param medicModifie le medicament modifié
-     * @return retourne le médicament modifié
      */
-    public Medicament modifMedic(Medicament medicModifie) {
-        return medicDAO.update(medicModifie);
+    public void modifMedic(Medicament medicModifie) throws SQLException {
+        medicDAO.update(medicModifie);
     }
 
     /**
