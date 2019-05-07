@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package projet.controleurs;
 
 import java.net.URL;
@@ -35,6 +30,9 @@ import projet.modele.ModeleDAO;
  */
 public class PrescriptionControleur implements Initializable, ControleursInterface {
 
+    /**
+     * controleur principal de l'app
+     */
     private MainControleur mainControleur;
     private ModeleDAO mod;
 
