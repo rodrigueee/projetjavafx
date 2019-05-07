@@ -35,6 +35,15 @@ public class Medicament {
      */
     private String code;
     private final StringProperty codeProp;
+    
+    /**
+     * quantité du medicament
+     */
+    private int quantite;
+    /**
+     * unité du medicament
+     */
+    private int unite;
 
     /**
      * constructeur par defaut
@@ -67,7 +76,6 @@ public class Medicament {
      * @param description
      * @param code
      */
-
     public Medicament(String nom, String description, String code) {
         this.nom = nom;
         this.description = description;
@@ -76,17 +84,19 @@ public class Medicament {
         this.codeProp = new SimpleStringProperty(code);
     }
 
-    /**
-     * constructeur paramétré
-     *
-     * @param code
-     */
-    public Medicament(String code) {
+    public Medicament(int idmedic, String nom, String description, String code, int quantite, int unite) {
+        this.idmedic = idmedic;
+        this.idMedic = new SimpleIntegerProperty(idmedic);
+        this.nom = nom;
+        this.description = description;
         this.code = code;
-        this.idMedic = new SimpleIntegerProperty(0);
         this.codeProp = new SimpleStringProperty(code);
+        this.quantite = quantite;
+        this.unite = unite;
     }
 
+    
+    
     /**
      * recuperer le nom en mode lecture
      *
@@ -154,16 +164,51 @@ public class Medicament {
         this.idmedic = idmedic;
     }
 
-     public int getIdMedicProp() {
+    public int getIdMedicProp() {
         return idMedic.get();
     }
 
-     public String getCodeProp() {
+    public String getCodeProp() {
         return codeProp.get();
     }
 
-    
+     
+    /**
+     * recuperer la quantité du medicament en mode lecture
+     *
+     * @return la quantité du medicament
+     */
+    public int getQuantite() {
+        return quantite;
+    }
 
+    /**
+     * modifier la quantité du medicament en mode ecriture
+     *
+     * @param quantite du medicament
+     */
+    public void setQuantite(int quantite) {
+        this.quantite = quantite;
+    }
+
+    /**
+     * recuperer l'unite du medicament en mode lecture
+     *
+     * @return l'unité du medicament
+     */
+    public int getUnite() {
+        return unite;
+    }
+
+    /**
+     * modifier l'unité du medicament en mode ecriture
+     *
+     * @param unite du medicament
+     */
+    public void setUnite(int unite) {
+        this.unite = unite;
+    }
+    
     /**
      * affiche du textes et les valeurs des variables
      *

@@ -18,6 +18,7 @@ import projet.metier.Informations;
 import projet.metier.Medecin;
 import projet.metier.Medicament;
 import projet.metier.Patient;
+import projet.metier.Prescription;
 
 /**
  *
@@ -86,8 +87,9 @@ public class ModeleDAO {
      *
      * @param desc nom du medecin
      * @return la liste des medecins correspondant au nom
+     * @throws java.sql.SQLException
      */
-    public List<Medecin> getMedec(String desc) {
+    public List<Medecin> getMedec(String desc) throws SQLException {
         return medecDAO.read(desc);
     }
 
@@ -96,8 +98,9 @@ public class ModeleDAO {
      *
      * @param desc nom du patient
      * @return la liste des patients correspondant au nom
+     * @throws java.sql.SQLException
      */
-    public List<Patient> getPatient(String desc) {
+    public List<Patient> getPatient(String desc) throws SQLException {
         return patDAO.read(desc);
     }
 
@@ -107,9 +110,10 @@ public class ModeleDAO {
      *
      * @param idpresc
      * @return retourne une liste d'info
+     * @throws java.sql.SQLException
      */
-    public List<Informations> getInfos(int idpresc) {
-        return infoDAO.read(Integer.toString(idpresc));
+    public Prescription getPresc(int idpresc) throws SQLException, Exception {
+        return prescDAO.read(idpresc);
     }
 
     /**
@@ -127,10 +131,11 @@ public class ModeleDAO {
      *
      * @param mc objet à inserer dans la BD
      * @return retourne le resultat
+     * @throws java.sql.SQLException
      */
-    public String ajouterMedecin(Medecin mc) {
-        Medecin me = medecDAO.create(mc);
-        if (me != null) {
+    public String ajouterMedecin(Medecin mc) throws SQLException {
+        medecDAO.create(mc);
+        if (true) {
             return "Medecin créé";
         }
         return "Medecin non crée";
@@ -141,10 +146,11 @@ public class ModeleDAO {
      *
      * @param pt objet à inserer dans la BD
      * @return retourne le resultat
+     * @throws java.sql.SQLException
      */
-    public String ajouterPatient(Patient pt) {
-        Patient pat = patDAO.create(pt);
-        if (pat != null) {
+    public String ajouterPatient(Patient pt) throws SQLException {
+        patDAO.create(pt);
+        if (true) {
             return "Patient créé";
         }
         return "Patient non crée";
@@ -193,8 +199,9 @@ public class ModeleDAO {
      *
      * @param idMedec id du medecin
      * @return retourne l'objet trouvé
+     * @throws java.sql.SQLException
      */
-    public Medecin getMedecId(int idMedec){
+    public Medecin getMedecId(int idMedec) throws SQLException {
         return medecDAO.read(idMedec);
     }
 
@@ -203,8 +210,9 @@ public class ModeleDAO {
      *
      * @param idPat id du patient
      * @return retourne l'objet trouvé
+     * @throws java.sql.SQLException
      */
-    public Patient getPatId(int idPat) {
+    public Patient getPatId(int idPat) throws SQLException {
         return patDAO.read(idPat);
     }
 
@@ -223,9 +231,10 @@ public class ModeleDAO {
      *
      * @param medecSup objet à supprimer dans la BD
      * @return retourne le resultat de la suppression
+     * @throws java.sql.SQLException
      */
-    public String suppMedec(Medecin medecSup) {
-        return medecDAO.delete(medecSup);
+    public void suppMedec(Medecin medecSup) throws SQLException {
+        medecDAO.delete(medecSup);
     }
 
     /**
@@ -233,9 +242,10 @@ public class ModeleDAO {
      *
      * @param patSup objet à supprimer dans la BD
      * @return retourne le resultat de la suppression
+     * @throws java.sql.SQLException
      */
-    public String suppPat(Patient patSup) {
-        return patDAO.delete(patSup);
+    public void suppPat(Patient patSup) throws SQLException {
+        patDAO.delete(patSup);
     }
 
     /**
@@ -252,9 +262,10 @@ public class ModeleDAO {
      *
      * @param medecModifie le medecin modifié
      * @return retourne le medecin modifié
+     * @throws java.sql.SQLException
      */
-    public Medecin modifMedec(Medecin medecModifie) {
-        return medecDAO.update(medecModifie);
+    public void modifMedec(Medecin medecModifie) throws SQLException {
+        medecDAO.update(medecModifie);
     }
 
     /**
@@ -262,9 +273,14 @@ public class ModeleDAO {
      *
      * @param patModifie le patient modifié
      * @return retourne le patient modifié
+     * @throws java.sql.SQLException
      */
-    public Patient modifPat(Patient patModifie) {
-        return patDAO.update(patModifie);
+    public void modifPat(Patient patModifie) throws SQLException {
+        patDAO.update(patModifie);
+    }
+
+    public List<Prescription> tousPresciptions()throws SQLException, Exception {
+        return prescDAO.readall();
     }
 
 }

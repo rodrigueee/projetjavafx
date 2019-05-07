@@ -1,6 +1,8 @@
 package projet.metier;
 
 import java.util.*;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 public class Patient {
 
@@ -12,10 +14,12 @@ public class Patient {
      * nom du patient
      */
     private String nomP;
+    private final StringProperty nomProp;
     /**
      * prenom du patient
      */
     private String prenomP;
+    private final StringProperty prenomProp;
     /**
      * telephone du patient
      */
@@ -25,7 +29,7 @@ public class Patient {
      * Constructeur par défaut
      */
     public Patient() {
-
+        this(0, null, null, null);
     }
 
     /**
@@ -41,6 +45,8 @@ public class Patient {
         this.nomP = nomP;
         this.prenomP = prenomP;
         this.tel = tel;
+        this.prenomProp = new SimpleStringProperty(prenomP);
+        this.nomProp = new SimpleStringProperty(nomP);
     }
 
     /**
@@ -50,6 +56,8 @@ public class Patient {
         this.nomP = nomP;
         this.prenomP = prenomP;
         this.tel = tel;
+        this.prenomProp = new SimpleStringProperty(prenomP);
+        this.nomProp = new SimpleStringProperty(nomP);
 
     }
 
@@ -59,6 +67,8 @@ public class Patient {
     public Patient(String nomC, String prenomP) {
         this.nomP = nomP;
         this.prenomP = prenomP;
+        this.prenomProp = new SimpleStringProperty(prenomP);
+        this.nomProp = new SimpleStringProperty(nomP);
     }
 
     /**
@@ -134,6 +144,14 @@ public class Patient {
         this.idpat = idpat;
     }
 
+    public String getPrenomProp() {
+        return prenomProp.get();
+    }
+
+    public String getNomProp() {
+        return nomProp.get();
+    }
+
     /**
      * affiche du textes et les valeurs des variables
      *
@@ -186,7 +204,5 @@ public class Patient {
         }
         return true;
     }
-
-
 
 }

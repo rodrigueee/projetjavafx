@@ -6,6 +6,10 @@
 package projet.metier;
 
 import java.util.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -17,10 +21,12 @@ public class Prescription {
      * id unique de la prescription
      */
     private int idPresc;
+    private final IntegerProperty idPrescProp;
     /**
      * date de la prescription
      */
     private String dateP;
+    private final StringProperty dateProp;
     /**
      * variable d'instance de type medecin
      */
@@ -32,12 +38,13 @@ public class Prescription {
     /**
      * liste de type medicament
      */
-    private List<Medicament> lMdedic;
+    private List<Medicament> lMedic;
 
     /**
      * constructeur par defaut
      */
     public Prescription() {
+        this(null, null, null);
     }
 
     /**
@@ -51,15 +58,18 @@ public class Prescription {
         this.dateP = dateP;
         this.md = md;
         this.pt = pt;
+        this.idPrescProp = new SimpleIntegerProperty();
+        this.dateProp = new SimpleStringProperty(dateP);
     }
 
-    /**
-     * constructeur paramétré
-     *
-     * @param dateP
-     */
-    public Prescription(String dateP) {
-        this.dateP = dateP;
+    public Prescription(Builder builder) {
+        this.idPresc = builder.idPresc;
+        this.dateP = builder.dateP;
+        this.md = builder.md;
+        this.pt = builder.pt;
+        this.lMedic = builder.lMedic;
+        this.idPrescProp = new SimpleIntegerProperty(builder.idPresc);
+        this.dateProp = new SimpleStringProperty(dateP);
     }
 
     /**
@@ -83,13 +93,15 @@ public class Prescription {
         this.pt = pt;
     }
 
-    public void setlMdedic(List<Medicament> lMdedic) {
-        this.lMdedic = lMdedic;
+    public void setlMedic(List<Medicament> lMedic) {
+        this.lMedic = lMedic;
     }
-/**
- * recuperer la date de la prescription
- * @return 
- */
+
+    /**
+     * recuperer la date de la prescription
+     *
+     * @return
+     */
     public String getDateP() {
         return dateP;
     }
@@ -126,8 +138,16 @@ public class Prescription {
      *
      * @return
      */
-    public List<Medicament> getlMdedic() {
-        return lMdedic;
+    public List<Medicament> getlMedic() {
+        return lMedic;
+    }
+    
+     public int getIdPrescProp() {
+        return idPrescProp.get();
+    }
+
+    public String getDateProp() {
+        return dateProp.get();
     }
 
     /**
@@ -142,8 +162,8 @@ public class Prescription {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 41 * hash + Objects.hashCode(this.dateP);
+        int hash = 7;
+        hash = 37 * hash + this.idPresc;
         return hash;
     }
 
@@ -165,12 +185,74 @@ public class Prescription {
             return false;
         }
         final Prescription other = (Prescription) obj;
-        if (!Objects.equals(this.dateP, other.dateP)) {
+        if (this.idPresc != other.idPresc) {
             return false;
         }
         return true;
     }
 
+    public static class Builder {
 
+        /**
+         * id unique de la prescription
+         */
+        private int idPresc;
+
+        /**
+         * date de la prescription
+         */
+        private String dateP;
+        /**
+         * variable d'instance de type medecin
+         */
+        private Medecin md;
+        /**
+         * variable d'instance de type patient
+         */
+        private Patient pt;
+        /**
+         * liste de type medicament
+         */
+        private List<Medicament> lMedic;
+
+        public Builder() {
+        }
+
+        public Builder setIdPresc(int idPresc) {
+            this.idPresc = idPresc;
+            return this;
+        }
+
+        public Builder setDateP(String dateP) {
+            this.dateP = dateP;
+            return this;
+        }
+
+        public Builder setMedec(Medecin md) {
+            this.md = md;
+            return this;
+        }
+
+        public Builder setPat(Patient pt) {
+            this.pt = pt;
+            return this;
+        }
+
+        public Builder setLMedic(List<Medicament> lMedic) {
+            this.lMedic = lMedic;
+            return this;
+        }
+
+        public Prescription build() throws Exception {
+            if (dateP == null || md == null || pt == null || lMedic == null) {
+                throw new Exception("Informations manquantes");
+            }
+            if (dateP.trim().length() == 0 || lMedic.isEmpty()) {
+                throw new Exception("Informations manquantes (Date vide ou liste medic vide)");
+            }
+            return new Prescription(this);
+        }
+
+    }
 
 }

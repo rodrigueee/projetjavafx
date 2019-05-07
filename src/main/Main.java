@@ -36,14 +36,29 @@ public class Main extends Application {
      * fichier de l'ecran du medicament
      */
     private static String medicFile = "/projet/vues/Medicament.fxml";
-
+    /**
+     * id de l'ecran du medecin
+     */
     public static String medecId = "medecin";
+    /**
+     * fichier de l'ecran du medecin
+     */
     private static String medecFile = "/projet/vues/Medecin.fxml";
-
+    /**
+     * id de l'ecran du patient
+     */
     public static String patId = "patient";
+    /**
+     * fichier de l'ecran du patient
+     */
     private static String patFile = "/projet/vues/Patient.fxml";
-
+    /**
+     * id de l'ecran de la prescription
+     */
     public static String prescId = "prescription";
+    /**
+     * fichier de l'ecran de la prescription
+     */
     private static String prescFile = "/projet/vues/Prescription.fxml";
     /**
      * titre de l'app
@@ -51,11 +66,11 @@ public class Main extends Application {
     public static String title = "Gestion Pharmacie - Projet JavaFX";
 
     /**
-     * methode qui demarre l'application
-     * etablie la connexion a la BDD 
-     * charge les ecrans via le controleur principale
-     * affiche l'ecran d'accueil et configure la fenetre de l'application
-     * a la fermeture de l'application, ferme la BDD
+     * methode qui demarre l'application, etablie la connexion a la BDD, charge
+     * les ecrans via le controleur principale, affiche l'ecran d'accueil et
+     * configure la fenetre de l'application a la fermeture de l'application,
+     * ferme la BDD
+     *
      * @param primaryStage
      */
     @Override

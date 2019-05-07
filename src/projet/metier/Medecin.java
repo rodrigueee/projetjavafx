@@ -6,6 +6,10 @@
 package projet.metier;
 
 import java.util.*;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -16,7 +20,6 @@ public class Medecin {
     /**
      * id unique du medecin
      */
-
     private int idmed;
     /**
      * nom du medecin
@@ -25,10 +28,12 @@ public class Medecin {
     /**
      * prenom du medecin
      */
+    private final StringProperty nomProp;
     private String prenomM;
     /**
      * matricule du medecin
      */
+    private final StringProperty prenomProp;
     private String matricule;
     /**
      * telephone du medecin
@@ -39,6 +44,7 @@ public class Medecin {
      * constructeur par defaut
      */
     public Medecin() {
+        this(0, null, null, null, null);
     }
 
     /**
@@ -56,6 +62,8 @@ public class Medecin {
         this.prenomM = prenomM;
         this.matricule = matricule;
         this.tel = tel;
+        this.prenomProp = new SimpleStringProperty(prenomM);
+        this.nomProp = new SimpleStringProperty(nomM);
     }
 
     /**
@@ -66,12 +74,14 @@ public class Medecin {
      * @param tel
      * @param matricule
      */
-    public Medecin(String nomM, String prenomM, String matricule,String tel) {
+    public Medecin(String nomM, String prenomM, String matricule, String tel) {
         this.nomM = nomM;
         this.prenomM = prenomM;
         this.matricule = matricule;
         this.tel = tel;
-        
+        this.prenomProp = new SimpleStringProperty(prenomM);
+        this.nomProp = new SimpleStringProperty(nomM);
+
     }
 
     /**
@@ -81,6 +91,8 @@ public class Medecin {
      */
     public Medecin(String matricule) {
         this.matricule = matricule;
+        this.prenomProp = new SimpleStringProperty("");
+        this.nomProp = new SimpleStringProperty("");
     }
 
     /**
@@ -168,6 +180,14 @@ public class Medecin {
         this.idmed = idmed;
     }
 
+    public String getPrenomProp() {
+        return prenomProp.get();
+    }
+
+    public String getNomProp() {
+        return nomProp.get();
+    }
+
     /**
      * affiche du textes et les valeurs des variables
      *
@@ -224,7 +244,5 @@ public class Medecin {
         }
         return true;
     }
-
-
 
 }

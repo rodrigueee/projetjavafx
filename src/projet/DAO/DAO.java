@@ -70,8 +70,9 @@ public abstract class DAO<Type> {
     /**
      * recupère tous les records de la BD
      * @return retourne une liste d'objet de l'ensemble de la classe
+     * @throws java.lang.Exception
      *
      */
-    public abstract List<Type> readall();
+    public abstract List<Type> readall() throws Exception;
 
 }

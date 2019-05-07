@@ -21,19 +21,21 @@ public class MenuControleur implements ControleursInterface {
     public void medic() {
         mainControleur.setScreen(Main.medicId);
     }
-        @FXML
+
+    @FXML
     public void medec() {
         mainControleur.setScreen(Main.medecId);
     }
-        @FXML
+
+    @FXML
     public void pat() {
         mainControleur.setScreen(Main.patId);
     }
-        @FXML
+
+    @FXML
     public void presc() {
         mainControleur.setScreen(Main.prescId);
     }
-
 
     @Override
     public void setMainControleur(MainControleur mainControleur) {

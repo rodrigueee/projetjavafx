@@ -23,6 +23,8 @@ import projet.modele.ModeleDAO;
 
 /**
  * controleur des medicaments
+ *
+ * @author rodri
  */
 public class MedicamentControleur implements Initializable, ControleursInterface {
 
@@ -295,17 +297,23 @@ public class MedicamentControleur implements Initializable, ControleursInterface
     public void accueil() {
         mainControleur.setScreen(Main.mainId);
     }
-
+    /**
+     * methode qui affiche l'ecran medecin
+     */
     @FXML
     public void medec() {
         mainControleur.setScreen(Main.medecId);
     }
-
+    /**
+     * methode qui affiche l'ecran patient
+     */
     @FXML
     public void pat() {
         mainControleur.setScreen(Main.patId);
     }
-
+    /**
+     * methode qui affiche l'ecran prescription
+     */
     @FXML
     public void presc() {
         mainControleur.setScreen(Main.prescId);

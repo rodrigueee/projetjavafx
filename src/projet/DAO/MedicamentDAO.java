@@ -40,7 +40,7 @@ public class MedicamentDAO extends DAO<Medicament> {
             lMedic.add(med);
         }
         if (lMedic.isEmpty()) {
-            throw new SQLException("Aucun médicament ne contient en description cette recherche");
+            throw new SQLException("Aucun médicament correspond à cette recherche");
         }
         return lMedic;
     }
