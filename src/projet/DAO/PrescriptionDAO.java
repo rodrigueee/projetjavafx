@@ -8,6 +8,7 @@ package projet.DAO;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -65,7 +66,13 @@ public class PrescriptionDAO extends DAO<Prescription> {
             int idpat = rs.getInt("IDPAT");
             pat = patDAO.read(idpat);
         }
-        Prescription presc = new Prescription.Builder().setIdPresc(idpresc).setDateP(date).setMedec(medec).setPat(pat).setLMedic(lMedic).build();
+        Prescription presc = new Prescription.Builder()
+                .setIdPresc(idpresc)
+                .setDateP(date)
+                .setMedec(medec)
+                .setPat(pat)
+                .setLMedic(lMedic)
+                .build();
         if (presc == null) {
             throw new SQLException("Aucune prescription correspondant à cette id");
         }
@@ -77,19 +84,47 @@ public class PrescriptionDAO extends DAO<Prescription> {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * https://stackoverflow.com/questions/4224228/preparedstatement-with-statement-return-generated-keys
+     * @param obj
+     * @throws SQLException 
+     */
     @Override
-    public void create(Prescription obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void create(Prescription obj) throws SQLException {
+        PreparedStatement pstm1 = dbConnect.prepareStatement("insert into PRESCRIPTION (DATEP, IDMED, IDPAT)values(?,?,?)", new String[]{"IDPRESC"});
+        pstm1.setString(1, obj.getDateP());
+        pstm1.setInt(2, obj.getMd().getIdmed());
+        pstm1.setInt(3, obj.getPt().getIdpat());
+        pstm1.executeUpdate();
+        ResultSet rs = pstm1.getGeneratedKeys();
+        rs.next();
+        int idPresc = rs.getInt(1);
+        for (Medicament medicament : obj.getlMedic()) {
+            pstm1 = dbConnect.prepareStatement("insert into INFORMATIONS (IDPRESC, IDMEDIC, QUANTITE, UNITE)values(?,?,?,?)");
+            pstm1.setInt(1, idPresc);
+            pstm1.setInt(2, medicament.getIdmedic());
+            pstm1.setInt(3, medicament.getQuantite());
+            pstm1.setInt(4, medicament.getUnite());
+            pstm1.executeUpdate();
+        }
     }
 
     @Override
-    public void update(Prescription obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void update(Prescription obj) throws SQLException {
+        PreparedStatement pstm = dbConnect.prepareStatement("update PRESCRIPTION set DATEP=? where IDPRESC=?");
+        pstm.setString(1, obj.getDateP());
+        pstm.setInt(2, obj.getIdPresc());
+        pstm.executeUpdate();
     }
 
     @Override
-    public void delete(Prescription obj) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void delete(Prescription obj) throws SQLException {
+        PreparedStatement pstm1 = dbConnect.prepareStatement("DELETE from informations where IDPRESC = ?");
+        pstm1.setInt(1, obj.getIdPresc());
+        pstm1.executeUpdate();
+        pstm1 = dbConnect.prepareStatement("DELETE from prescription where IDPRESC = ?");
+        pstm1.setInt(1, obj.getIdPresc());
+        pstm1.executeUpdate();
     }
 
     /**
@@ -127,7 +162,7 @@ public class PrescriptionDAO extends DAO<Prescription> {
             String code = rs.getString("CODE");
             int quantite = rs.getInt("QUANTITE");
             int unite = rs.getInt("UNITE");
-            Medicament medic = new Medicament(idmedic, nom, desc, code, unite, quantite);
+            Medicament medic = new Medicament(idmedic, nom, desc, code, quantite, unite);
             lMedic.add(medic);
             date = rs.getString("DATEP");
             String annee = date.substring(0, 4);

@@ -283,4 +283,16 @@ public class ModeleDAO {
         return prescDAO.readall();
     }
 
+    public void suppPresc(Prescription prescSup) throws SQLException {
+        prescDAO.delete(prescSup);
+    }
+
+    public void modifPresc(Prescription prescModif) throws SQLException {
+        prescDAO.update(prescModif);
+    }
+
+    public void ajouterPresc(Prescription p)throws SQLException {
+        prescDAO.create(p);
+    }
+
 }

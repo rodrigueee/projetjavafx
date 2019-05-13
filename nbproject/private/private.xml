@@ -3,21 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/controleurs/PatientControleur.java</file>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/controleurs/PrescriptionControleur.java</file>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/metier/Medicament.java</file>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/controleurs/MainControleur.java</file>
             <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/controleurs/MedecinControleur.java</file>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/DAO/DAO.java</file>
+            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/controleurs/PatientControleur.java</file>
             <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/metier/Informations.java</file>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/DAO/MedicamentDAO.java</file>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/DAO/PrescriptionDAO.java</file>
+            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/controleurs/PrescriptionControleur.java</file>
             <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/main/Main.java</file>
+            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/metier/Medicament.java</file>
             <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/controleurs/MedicamentControleur.java</file>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/modele/ModeleDAO.java</file>
             <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/metier/Prescription.java</file>
             <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/DAO/InformationsDAO.java</file>
-            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/metier/Medecin.java</file>
+            <file>file:/C:/Users/rodri/OneDrive/Documents/NetBeansProjects/ProjetJavaFXCrombezRodrigue/src/projet/controleurs/MainControleur.java</file>
         </group>
     </open-files>
 </project-private>

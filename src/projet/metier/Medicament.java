@@ -216,7 +216,7 @@ public class Medicament {
      */
     @Override
     public String toString() {
-        return "Medicament{id=" + idmedic + " nom=" + nom + ", description=" + description + ", code=" + code + '}';
+        return "Code : " + code + ", Nom : " + nom + ", Quantité : " + quantite + ", Unité : " + unite;
     }
 
     /**

@@ -195,7 +195,7 @@ public class Medecin {
      */
     @Override
     public String toString() {
-        return "Medecin{" + "idmed=" + idmed + ", nomM=" + nomM + ", prenomM=" + prenomM + ", matricule=" + matricule + ", tel=" + tel + '}';
+        return "Matricule : " + matricule + ", Nom : " + nomM + ", Prenom : " + prenomM;
     }
 
     @Override
