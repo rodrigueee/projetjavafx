@@ -2,24 +2,32 @@ package projet.controleurs;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import main.Main;
+import projet.metier.Medicament;
 import projet.metier.Patient;
+import projet.metier.Prescription;
 import projet.modele.ModeleDAO;
 
 /**
@@ -67,7 +75,7 @@ public class PatientControleur implements Initializable, ControleursInterface {
      * variables des boutons
      */
     @FXML
-    public Button modifBtn, suppBtn, retourBtn;
+    public Button modifBtn, suppBtn, retourBtn, prescBtn;
 
     /**
      * Appele pour initialiser un contrôleur après le traitement complet de son
@@ -107,6 +115,7 @@ public class PatientControleur implements Initializable, ControleursInterface {
         if (p != null) {
             modifBtn.setDisable(false);
             suppBtn.setDisable(false);
+            prescBtn.setDisable(false);
             nom.setDisable(false);
             prenom.setDisable(false);
             tel.setDisable(false);
@@ -117,6 +126,7 @@ public class PatientControleur implements Initializable, ControleursInterface {
         } else {
             modifBtn.setDisable(true);
             suppBtn.setDisable(true);
+            prescBtn.setDisable(true);
             nom.setDisable(true);
             prenom.setDisable(true);
             tel.setDisable(true);
@@ -292,6 +302,49 @@ public class PatientControleur implements Initializable, ControleursInterface {
                 erreur.show();
             }
         });
+    }
+    /**
+     * affiche les prescriptions avec les details pour le patient selectionner
+     */
+    @FXML
+    public void detPresc() {
+        Patient p = patTable.getSelectionModel().getSelectedItem();
+        try {
+            List<Prescription> listePresc = mod.tousPresciptions();
+            List<Prescription> lPresc = new ArrayList<>();
+            listePresc.forEach((presc) -> {
+                if (p.getIdpat() == presc.getPt().getIdpat()) {
+                    lPresc.add(presc);
+                }
+            });
+            Dialog dialog = new Dialog();
+            dialog.setTitle(Main.title);
+            dialog.setHeaderText("Prescription(s) de : " + p.getNomP() + " " + p.getPrenomP());
+            GridPane grid = new GridPane();
+            grid.setPadding(new Insets(20, 150, 10, 10));
+            dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+            int row = 1;
+            grid.add(new Label("Date"), 0, 0);
+            grid.add(new Label("Médecin"), 1, 0);
+            grid.add(new Label("Médicaments"), 2, 0);
+            for (Prescription presc : lPresc) {
+                grid.add(new Label(presc.getDateP()), 0, row);
+                grid.add(new Label(presc.getMd().toString()), 1, row);
+                Label medicLabel = new Label();
+                presc.getlMedic().forEach((medic) -> {
+                    medicLabel.setText(medicLabel.getText() + "\n" + medic.toString());
+                });
+                grid.add(medicLabel, 2, row);
+                row++;
+            }
+            dialog.getDialogPane().setContent(grid);
+            dialog.show();
+        } catch (Exception ex) {
+            Alert erreur = new Alert(Alert.AlertType.ERROR);
+            erreur.setTitle(Main.title);
+            erreur.setHeaderText("Erreur de lecture des prescriptions");
+            erreur.show();
+        }
     }
 
     /**

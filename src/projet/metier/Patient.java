@@ -3,8 +3,9 @@ package projet.metier;
 import java.util.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import projet.observer.Observer;
 
-public class Patient {
+public class Patient extends Observer {
 
     /**
      * id unique du patient
@@ -203,6 +204,15 @@ public class Patient {
             return false;
         }
         return true;
+    }
+    /**
+     * methode qui notifie le changement du numero de tel du medecin de ce patient
+     * @param notif message à notifié
+     * @param md le medecin qui à changé de modifier
+     */
+    @Override
+    public void observe(String notif, Medecin md) {
+        System.out.println(prenomP + " " + nomP + " à été notifié par le médecin : " + md.getNomM() + " " + md.getPrenomM() + " de : " + notif);
     }
 
 }

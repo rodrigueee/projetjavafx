@@ -30,6 +30,10 @@ public class MainControleur extends StackPane {
      * modeleDAO de l'app
      */
     private ModeleDAO mod;
+    /**
+     * controleur des medecins
+     */
+    public MedecinControleur mdControleur;
 
     /**
      * constructeur par defaut qui appelle le constructeur parent
@@ -62,6 +66,9 @@ public class MainControleur extends StackPane {
             ControleursInterface myScreenControler = ((ControleursInterface) myLoader.getController());
             myScreenControler.setMainControleur(this);
             myScreenControler.setMod(mod);
+            if (name.equals("medecin")) {
+                mdControleur = (MedecinControleur) myScreenControler;
+            }
             addScreen(name, loadScreen);
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -109,6 +116,7 @@ public class MainControleur extends StackPane {
 
     /**
      * setter du modeleDAO de l'app
+     *
      * @param mod le modeleDAO de l'app
      */
     public void setMod(ModeleDAO mod) {

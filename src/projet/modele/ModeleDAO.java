@@ -130,30 +130,22 @@ public class ModeleDAO {
      * envoie l'objet dans dao qui l'ajoute dans le BD
      *
      * @param mc objet à inserer dans la BD
-     * @return retourne le resultat
      * @throws java.sql.SQLException
      */
-    public String ajouterMedecin(Medecin mc) throws SQLException {
+    public void ajouterMedecin(Medecin mc) throws SQLException {
         medecDAO.create(mc);
-        if (true) {
-            return "Medecin créé";
-        }
-        return "Medecin non crée";
+
     }
 
     /**
      * envoie l'objet dans dao qui l'ajoute dans le BD
      *
      * @param pt objet à inserer dans la BD
-     * @return retourne le resultat
      * @throws java.sql.SQLException
      */
-    public String ajouterPatient(Patient pt) throws SQLException {
+    public void ajouterPatient(Patient pt) throws SQLException {
         patDAO.create(pt);
-        if (true) {
-            return "Patient créé";
-        }
-        return "Patient non crée";
+
     }
 
     /**
@@ -230,7 +222,6 @@ public class ModeleDAO {
      * supprime l'objet dans la BD
      *
      * @param medecSup objet à supprimer dans la BD
-     * @return retourne le resultat de la suppression
      * @throws java.sql.SQLException
      */
     public void suppMedec(Medecin medecSup) throws SQLException {
@@ -241,7 +232,6 @@ public class ModeleDAO {
      * supprime l'objet dans la BD
      *
      * @param patSup objet à supprimer dans la BD
-     * @return retourne le resultat de la suppression
      * @throws java.sql.SQLException
      */
     public void suppPat(Patient patSup) throws SQLException {
@@ -261,7 +251,6 @@ public class ModeleDAO {
      * modifie le medecin dans le BD
      *
      * @param medecModifie le medecin modifié
-     * @return retourne le medecin modifié
      * @throws java.sql.SQLException
      */
     public void modifMedec(Medecin medecModifie) throws SQLException {
@@ -272,25 +261,41 @@ public class ModeleDAO {
      * modifie le patient dans le BD
      *
      * @param patModifie le patient modifié
-     * @return retourne le patient modifié
      * @throws java.sql.SQLException
      */
     public void modifPat(Patient patModifie) throws SQLException {
         patDAO.update(patModifie);
     }
-
+    /**
+     * recupère la liste des prescriptions dans la BD
+     *
+     * @return retourne la liste de tous les prescriptions
+     * @throws java.sql.SQLException
+     */
     public List<Prescription> tousPresciptions()throws SQLException, Exception {
         return prescDAO.readall();
     }
-
+    /**
+     * supprime la prescription dans la BD
+     * @param prescSup prescription à supprimer
+     * @throws java.sql.SQLException
+     */
     public void suppPresc(Prescription prescSup) throws SQLException {
         prescDAO.delete(prescSup);
     }
-
+    /**
+     * modifie la prescription dans le BD
+     * @param prescModif prescription à modifier
+     * @throws SQLException 
+     */
     public void modifPresc(Prescription prescModif) throws SQLException {
         prescDAO.update(prescModif);
     }
-
+    /**
+     * ajoute une prescription dans la BD
+     * @param p la prescription à ajouter
+     * @throws SQLException 
+     */
     public void ajouterPresc(Prescription p)throws SQLException {
         prescDAO.create(p);
     }

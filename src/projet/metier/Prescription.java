@@ -62,6 +62,11 @@ public class Prescription {
         this.dateProp = new SimpleStringProperty(dateP);
     }
 
+    /**
+     * constructeur paramétré du builder (design pattern)
+     *
+     * @param builder instance du builder
+     */
     public Prescription(Builder builder) {
         this.idPresc = builder.idPresc;
         this.dateP = builder.dateP;
@@ -141,8 +146,8 @@ public class Prescription {
     public List<Medicament> getlMedic() {
         return lMedic;
     }
-    
-     public int getIdPrescProp() {
+
+    public int getIdPrescProp() {
         return idPrescProp.get();
     }
 
@@ -215,6 +220,9 @@ public class Prescription {
          */
         private List<Medicament> lMedic;
 
+        /**
+         * constucteur par defaut
+         */
         public Builder() {
         }
 
@@ -243,6 +251,13 @@ public class Prescription {
             return this;
         }
 
+        /**
+         * methode qui permet la creation d'une prescription à condition que
+         * toutes les donnees obligatoires soient fournies
+         *
+         * @return retourne une nouvelle prescription
+         * @throws Exception 
+         */
         public Prescription build() throws Exception {
             if (dateP == null || md == null || pt == null || lMedic == null) {
                 throw new Exception("Informations manquantes");

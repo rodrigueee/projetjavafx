@@ -83,7 +83,15 @@ public class Medicament {
         this.idMedic = new SimpleIntegerProperty(0);
         this.codeProp = new SimpleStringProperty(code);
     }
-
+    /**
+     * constructeur paramétré full
+     * @param idmedic
+     * @param nom
+     * @param description
+     * @param code
+     * @param quantite
+     * @param unite 
+     */
     public Medicament(int idmedic, String nom, String description, String code, int quantite, int unite) {
         this.idmedic = idmedic;
         this.idMedic = new SimpleIntegerProperty(idmedic);

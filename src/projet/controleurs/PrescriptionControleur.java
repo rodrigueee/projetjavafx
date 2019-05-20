@@ -100,11 +100,18 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         // Initialize the person table with the two columns.
+        // idColonne va prendre la getter(get)idPrescProp
+        //idem pour date
         idColonne.setCellValueFactory(new PropertyValueFactory<>("idPrescProp"));
         dateColonne.setCellValueFactory(new PropertyValueFactory<>("dateProp"));
         listeMedicAj.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
     }
 
+    /**
+     * setteur du controlleur de l'app
+     *
+     * @param mainControleur
+     */
     @Override
     public void setMainControleur(MainControleur mainControleur) {
         this.mainControleur = mainControleur;
@@ -142,6 +149,9 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
         }
     }
 
+    /**
+     * affiche un pop up qui demande la quantite et l'unite du medicament
+     */
     @FXML
     public void detailsMedic() {
         Medicament m = listeMedicAj.getSelectionModel().getSelectedItem();
@@ -230,11 +240,12 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
                 patAj.getSelectionModel().clearSelection();
                 listeMedicAj.getSelectionModel().clearSelection();
                 refreshListe();
+                mainControleur.mdControleur.refreshListe();
             } catch (SQLException e) {
                 Alert erreur = new Alert(Alert.AlertType.ERROR);
                 erreur.setTitle(Main.title);
                 erreur.setHeaderText("Erreur d'ajout");
-                erreur.setContentText(e.getCause().toString());
+                erreur.setContentText("Format de la date incorrect\nFormats acceptés : \n000000\n00/00/00\n00000000\n00/00/0000\nVerifiez que la date soit une date valide!!");
                 erreur.show();
             } catch (Exception e) {
                 Alert erreur = new Alert(Alert.AlertType.ERROR);
@@ -309,6 +320,7 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
                 erreur.setHeaderText("Prescription supprimé");
                 erreur.show();
                 refreshListe();
+                mainControleur.mdControleur.refreshListe();
             } catch (SQLException e) {
                 Alert erreur = new Alert(Alert.AlertType.ERROR);
                 erreur.setTitle(Main.title);
@@ -368,26 +380,42 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
         });
     }
 
+    /**
+     * methode qui affiche l'ecran d'accueil
+     */
     @FXML
     public void accueil() {
         mainControleur.setScreen(Main.mainId);
     }
 
+    /**
+     * methode qui affiche l'ecran medicament
+     */
     @FXML
     public void medic() {
         mainControleur.setScreen(Main.medicId);
     }
 
+    /**
+     * methode qui affiche l'ecran medecin
+     */
     @FXML
     public void medec() {
         mainControleur.setScreen(Main.medecId);
     }
 
+    /**
+     * methode qui affiche l'ecran patient
+     */
     @FXML
     public void pat() {
         mainControleur.setScreen(Main.patId);
     }
 
+    /**
+     * methode qui met à jour la tableview et cache le bouton retour si
+     * necessaire
+     */
     @FXML
     public void refreshListe() {
         try {
@@ -410,11 +438,17 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
             Alert erreur = new Alert(Alert.AlertType.ERROR);
             erreur.setTitle(Main.title);
             erreur.setHeaderText("Erreur de lecture des prescriptions");
+            System.out.println(ex.getMessage() + "\n" + ex.getCause());
             erreur.show();
             accueil();
         }
     }
 
+    /**
+     * setteur du modeleDAO de l'app
+     *
+     * @param mod modeleDAO de l'app
+     */
     @Override
     public void setMod(ModeleDAO mod
     ) {

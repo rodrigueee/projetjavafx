@@ -10,12 +10,13 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import projet.observer.Sujet;
 
 /**
  *
  * @author rodri
  */
-public class Medecin {
+public class Medecin extends Sujet {
 
     /**
      * id unique du medecin
@@ -165,6 +166,7 @@ public class Medecin {
      */
     public void setTel(String tel) {
         this.tel = tel;
+        notify("Je viens de changer de numéro : " + tel, this);
     }
 
     /**

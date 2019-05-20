@@ -9,8 +9,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import projet.metier.Medecin;
+import projet.metier.Patient;
+import projet.metier.Prescription;
 
 /**
  *
@@ -27,23 +31,39 @@ public class MedecinDAO extends DAO<Medecin> {
      */
     @Override
     public List<Medecin> read(String d) throws SQLException {
-        List<Medecin> lMedec = new ArrayList<>();
-        PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM medecin WHERE nom LIKE UPPER(?)");
-        pstm.setString(1, "%" + d + "%");
-        ResultSet rs = pstm.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt("IDMED");
-            String nom = rs.getString("NOM");
-            String prenom = rs.getString("PRENOM");
-            String matricule = rs.getString("MATRICULE");
-            String tel = rs.getString("TEL");
-            Medecin med = new Medecin(id, nom, prenom, matricule, tel);
-            lMedec.add(med);
+        try {
+            List<Medecin> lme = new ArrayList<>();
+            PrescriptionDAO prescDAO = new PrescriptionDAO();
+            List<Medecin> lMedec = new ArrayList<>();
+            PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM medecin WHERE nom LIKE UPPER(?)");
+            pstm.setString(1, "%" + d + "%");
+            ResultSet rs = pstm.executeQuery();
+            List<Prescription> listePresc = prescDAO.readall();
+            while (rs.next()) {
+                Set<Patient> listePat = new HashSet<>();
+                int id = rs.getInt("IDMED");
+                String nom = rs.getString("NOM");
+                String prenom = rs.getString("PRENOM");
+                String matricule = rs.getString("MATRICULE");
+                String tel = rs.getString("TEL");
+                Medecin med = new Medecin(id, nom, prenom, matricule, tel);
+                listePresc.forEach((presc) -> {
+                    if (presc.getMd().getIdmed() == id) {
+                        listePat.add(presc.getPt());
+                    }
+                });
+                listePat.forEach((pt) -> {
+                    med.add(pt);
+                });
+                lMedec.add(med);
+            }
+            if (lMedec.isEmpty()) {
+                throw new SQLException("Aucun medecin correspond à cette recherche");
+            }
+            return lMedec;
+        } catch (Exception ex) {
+            throw new SQLException("Erreur de lecture");
         }
-        if (lMedec.isEmpty()) {
-            throw new SQLException("Aucun medecin correspond à cette recherche");
-        }
-        return lMedec;
     }
 
     /**
@@ -54,12 +74,13 @@ public class MedecinDAO extends DAO<Medecin> {
      */
     @Override
     public void create(Medecin obj) throws SQLException {
-        PreparedStatement pstm1 = dbConnect.prepareStatement("insert into MEDECIN (NOM, PRENOM, MATRICULE, TEL)values(?,?,?,?)");
-        pstm1.setString(1, obj.getNomM().toUpperCase());
-        pstm1.setString(2, obj.getPrenomM());
-        pstm1.setString(3, obj.getMatricule());
-        pstm1.setString(4, obj.getTel());
-        pstm1.executeUpdate();
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement("insert into MEDECIN (NOM, PRENOM, MATRICULE, TEL)values(?,?,?,?)")) {
+            pstm1.setString(1, obj.getNomM().toUpperCase());
+            pstm1.setString(2, obj.getPrenomM());
+            pstm1.setString(3, obj.getMatricule());
+            pstm1.setString(4, obj.getTel());
+            pstm1.executeUpdate();
+        }
     }
 
     /**
@@ -101,16 +122,28 @@ public class MedecinDAO extends DAO<Medecin> {
     @Override
     public List<Medecin> readall() {
         List<Medecin> lme = new ArrayList<>();
+        PrescriptionDAO prescDAO = new PrescriptionDAO();
+        prescDAO.setConnection(dbConnect);
         try (PreparedStatement pstm = dbConnect.prepareStatement("select * from medecin order by idmed")) {
+            List<Prescription> listePresc = prescDAO.readall();
             ResultSet rs = pstm.executeQuery();
 
             while (rs.next()) {
+                Set<Patient> listePat = new HashSet<>();
                 int id = rs.getInt("IDMED");
                 String nom = rs.getString("NOM");
                 String prenom = rs.getString("PRENOM");
                 String matricule = rs.getString("MATRICULE");
                 String tel = rs.getString("TEL");
                 Medecin md = new Medecin(id, nom, prenom, matricule, tel);
+                listePresc.forEach((presc) -> {
+                    if (presc.getMd().getIdmed() == id) {
+                        listePat.add(presc.getPt());
+                    }
+                });
+                listePat.forEach((pt) -> {
+                    md.add(pt);
+                });
                 lme.add(md);
             }
         } catch (Exception e) {
@@ -124,20 +157,36 @@ public class MedecinDAO extends DAO<Medecin> {
      *
      * @param idmed id du medecin a cherché
      * @return retourne null ou le medecin s'il l'a trouvé
+     * @throws java.sql.SQLException
      */
     @Override
     public Medecin read(int idmed) throws SQLException {
-        PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM medecin WHERE IDMED = ? order by idmed");
-        pstm.setInt(1, idmed);
-        ResultSet rs = pstm.executeQuery();
-        if (rs.next()) {
-            String nom = rs.getString("NOM");
-            String prenom = rs.getString("PRENOM");
-            String matricule = rs.getString("MATRICULE");
-            String tel = rs.getString("TEL");
-            return new Medecin(idmed, nom, prenom, matricule, tel);
-        } else {
-            throw new SQLException("id du medecin inconnu");
+        try {
+            PrescriptionDAO prescDAO = new PrescriptionDAO();
+            prescDAO.setConnection(dbConnect);
+            PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM medecin WHERE IDMED = ? order by idmed");
+            List<Prescription> listePresc = prescDAO.readall();
+            pstm.setInt(1, idmed);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                Set<Patient> listePat = new HashSet<>();
+                String nom = rs.getString("NOM");
+                String prenom = rs.getString("PRENOM");
+                String matricule = rs.getString("MATRICULE");
+                String tel = rs.getString("TEL");
+                Medecin md = new Medecin(idmed, nom, prenom, matricule, tel);
+                listePresc.forEach((presc) -> {
+                    listePat.add(presc.getPt());
+                });
+                listePat.forEach((pt) -> {
+                    md.add(pt);
+                });
+                return md;
+            } else {
+                throw new SQLException("id du medecin inconnu");
+            }
+        } catch (Exception ex) {
+            throw new SQLException("Erreur de lecture");
         }
     }
 }
