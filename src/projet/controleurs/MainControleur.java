@@ -31,9 +31,9 @@ public class MainControleur extends StackPane {
      */
     private ModeleDAO mod;
     /**
-     * controleur des medecins
+     * liste des controleurs de l'App
      */
-    public MedecinControleur mdControleur;
+    private HashMap<String, ControleursInterface> listeControleurs = new HashMap<>();
 
     /**
      * constructeur par defaut qui appelle le constructeur parent
@@ -66,9 +66,7 @@ public class MainControleur extends StackPane {
             ControleursInterface myScreenControler = ((ControleursInterface) myLoader.getController());
             myScreenControler.setMainControleur(this);
             myScreenControler.setMod(mod);
-            if (name.equals("medecin")) {
-                mdControleur = (MedecinControleur) myScreenControler;
-            }
+            listeControleurs.put(name, myScreenControler);
             addScreen(name, loadScreen);
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -87,7 +85,8 @@ public class MainControleur extends StackPane {
     public void setScreen(final String name) {
         if (screens.get(name) != null) {   //ecran charge
             final DoubleProperty opacity = opacityProperty();
-
+           ControleursInterface myScreenController =  listeControleurs.get(name);
+           myScreenController.refreshListe();
             if (!getChildren().isEmpty()) {    //s'il y a plus d'un ecran
                 Timeline fade = new Timeline(
                         new KeyFrame(Duration.ZERO, new KeyValue(opacity, 1.0)),

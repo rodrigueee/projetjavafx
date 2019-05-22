@@ -18,4 +18,9 @@ public interface ControleursInterface {
      * @param mod le modeleDAO de l'app
      */
     void setMod(ModeleDAO mod);
+    
+    /**
+     * cette methode permettra d'actualiser les tableviews des controleurs 
+     */
+    void refreshListe();
 }

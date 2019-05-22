@@ -14,7 +14,8 @@ public abstract class Observer {
      *
      * @param notif message à notifié
      * @param md le medecin qui à changé de modifier
+     * @return le message de notification
      */
-    public abstract void observe(String notif, Medecin md);
+    public abstract String observe(String notif, Medecin md);
 
 }

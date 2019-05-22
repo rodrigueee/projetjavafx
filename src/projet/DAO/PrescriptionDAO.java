@@ -41,42 +41,44 @@ public class PrescriptionDAO extends DAO<Prescription> {
         PatientDAO patDAO = new PatientDAO();
         medecDAO.setConnection(dbConnect);
         patDAO.setConnection(dbConnect);
-        PreparedStatement pstm = dbConnect.prepareStatement("SELECT p.*, m.*, i.quantite, i.unite FROM prescription p join informations i on p.idpresc = i.idpresc join medicament m on i.idmedic = m.idmedic where p.idpresc = ?");
-        pstm.setInt(1, idpresc);
-        ResultSet rs = pstm.executeQuery();
-        String date = null;
-        Medecin medec = null;
-        Patient pat = null;
-        while (rs.next()) {
-            int idmedic = rs.getInt("IDMEDIC");
-            String nom = rs.getString("NOM");
-            String desc = rs.getString("DESCRIPTION");
-            String code = rs.getString("CODE");
-            int quantite = rs.getInt("QUANTITE");
-            int unite = rs.getInt("UNITE");
-            Medicament medic = new Medicament(idmedic, nom, desc, code, unite, quantite);
-            lMedic.add(medic);
-            date = rs.getString("DATEP");
-            String annee = date.substring(0, 4);
-            String mois = date.substring(5, 7);
-            String jour = date.substring(8, 10);
-            date = jour + "/" + mois + "/" + annee;
-            int idmedec = rs.getInt("IDMED");
-            medec = medecDAO.read(idmedec);
-            int idpat = rs.getInt("IDPAT");
-            pat = patDAO.read(idpat);
+        try (PreparedStatement pstm = dbConnect.prepareStatement("SELECT p.*, m.*, i.quantite, i.unite FROM prescription p join informations i on p.idpresc = i.idpresc join medicament m on i.idmedic = m.idmedic where p.idpresc = ?")) {
+            pstm.setInt(1, idpresc);
+            ResultSet rs = pstm.executeQuery();
+
+            String date = null;
+            Medecin medec = null;
+            Patient pat = null;
+            while (rs.next()) {
+                int idmedic = rs.getInt("IDMEDIC");
+                String nom = rs.getString("NOM");
+                String desc = rs.getString("DESCRIPTION");
+                String code = rs.getString("CODE");
+                int quantite = rs.getInt("QUANTITE");
+                int unite = rs.getInt("UNITE");
+                Medicament medic = new Medicament(idmedic, nom, desc, code, unite, quantite);
+                lMedic.add(medic);
+                date = rs.getString("DATEP");
+                String annee = date.substring(0, 4);
+                String mois = date.substring(5, 7);
+                String jour = date.substring(8, 10);
+                date = jour + "/" + mois + "/" + annee;
+                int idmedec = rs.getInt("IDMED");
+                medec = medecDAO.read(idmedec);
+                int idpat = rs.getInt("IDPAT");
+                pat = patDAO.read(idpat);
+            }
+            Prescription presc = new Prescription.Builder()
+                    .setIdPresc(idpresc)
+                    .setDateP(date)
+                    .setMedec(medec)
+                    .setPat(pat)
+                    .setLMedic(lMedic)
+                    .build();
+            if (presc == null) {
+                throw new SQLException("Aucune prescription correspondant à cette id");
+            }
+            return presc;
         }
-        Prescription presc = new Prescription.Builder()
-                .setIdPresc(idpresc)
-                .setDateP(date)
-                .setMedec(medec)
-                .setPat(pat)
-                .setLMedic(lMedic)
-                .build();
-        if (presc == null) {
-            throw new SQLException("Aucune prescription correspondant à cette id");
-        }
-        return presc;
     }
 
     @Override
@@ -86,8 +88,9 @@ public class PrescriptionDAO extends DAO<Prescription> {
 
     /**
      * https://stackoverflow.com/questions/4224228/preparedstatement-with-statement-return-generated-keys
+     *
      * @param obj
-     * @throws SQLException 
+     * @throws SQLException
      */
     @Override
     public void create(Prescription obj) throws SQLException {
@@ -99,7 +102,8 @@ public class PrescriptionDAO extends DAO<Prescription> {
         ResultSet rs = pstm1.getGeneratedKeys();
         rs.next();
         int idPresc = rs.getInt(1);
-        for (Medicament medicament : obj.getlMedic()) {
+        List<Medicament> lMedic = obj.getlMedic();
+        for (Medicament medicament : lMedic) {
             pstm1 = dbConnect.prepareStatement("insert into INFORMATIONS (IDPRESC, IDMEDIC, QUANTITE, UNITE)values(?,?,?,?)");
             pstm1.setInt(1, idPresc);
             pstm1.setInt(2, medicament.getIdmedic());
@@ -107,14 +111,16 @@ public class PrescriptionDAO extends DAO<Prescription> {
             pstm1.setInt(4, medicament.getUnite());
             pstm1.executeUpdate();
         }
+        pstm1.close();
     }
 
     @Override
     public void update(Prescription obj) throws SQLException {
-        PreparedStatement pstm = dbConnect.prepareStatement("update PRESCRIPTION set DATEP=? where IDPRESC=?");
-        pstm.setString(1, obj.getDateP());
-        pstm.setInt(2, obj.getIdPresc());
-        pstm.executeUpdate();
+        try (PreparedStatement pstm = dbConnect.prepareStatement("update PRESCRIPTION set DATEP=? where IDPRESC=?")) {
+            pstm.setString(1, obj.getDateP());
+            pstm.setInt(2, obj.getIdPresc());
+            pstm.executeUpdate();
+        }
     }
 
     @Override
@@ -125,6 +131,8 @@ public class PrescriptionDAO extends DAO<Prescription> {
         pstm1 = dbConnect.prepareStatement("DELETE from prescription where IDPRESC = ?");
         pstm1.setInt(1, obj.getIdPresc());
         pstm1.executeUpdate();
+        pstm1.close();
+
     }
 
     /**
@@ -144,40 +152,39 @@ public class PrescriptionDAO extends DAO<Prescription> {
         PatientDAO patDAO = new PatientDAO();
         medecDAO.setConnection(dbConnect);
         patDAO.setConnection(dbConnect);
-        PreparedStatement pstm = dbConnect.prepareStatement("SELECT p.*, m.*, i.quantite, i.unite FROM prescription p join informations i on p.idpresc = i.idpresc join medicament m on i.idmedic = m.idmedic", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
-        ResultSet rs = pstm.executeQuery();
-        int idpresc = 0;
-        String date = null;
-        Medecin medec = null;
-        Patient pat = null;
-        while (rs.next()) {
-            if (idpresc != rs.getInt("IDPRESC")) {
-                //Car référence d'objet passée lors du building de la prescription donc si presc différente => nouvelle liste
-                lMedic = new ArrayList<>();
+        try (PreparedStatement pstm = dbConnect.prepareStatement("SELECT p.*, m.*, i.quantite, i.unite FROM prescription p join informations i on p.idpresc = i.idpresc join medicament m on i.idmedic = m.idmedic"); ResultSet rs = pstm.executeQuery()) {
+            int idpresc = 0;
+            String date = null;
+            Medecin medec = null;
+            Patient pat = null;
+            while (rs.next()) {
+                if (idpresc != rs.getInt("IDPRESC")) {
+                    //Car référence d'objet passée lors du building de la prescription donc si presc différente => nouvelle liste
+                    lMedic = new ArrayList<>();
+                }
+                idpresc = rs.getInt("IDPRESC");
+                int idmedic = rs.getInt("IDMEDIC");
+                String nom = rs.getString("NOM");
+                String desc = rs.getString("DESCRIPTION");
+                String code = rs.getString("CODE");
+                int quantite = rs.getInt("QUANTITE");
+                int unite = rs.getInt("UNITE");
+                Medicament medic = new Medicament(idmedic, nom, desc, code, quantite, unite);
+                lMedic.add(medic);
+                date = rs.getString("DATEP");
+                String annee = date.substring(0, 4);
+                String mois = date.substring(5, 7);
+                String jour = date.substring(8, 10);
+                date = jour + "/" + mois + "/" + annee;
+                int idmedec = rs.getInt("IDMED");
+                medec = medecDAO.read(idmedec);
+                int idpat = rs.getInt("IDPAT");
+                pat = patDAO.read(idpat);
+                Prescription presc = new Prescription.Builder().setIdPresc(idpresc).setDateP(date).setMedec(medec).setPat(pat).setLMedic(lMedic).build();
+                hPresc.add(presc);
             }
-            idpresc = rs.getInt("IDPRESC");
-            int idmedic = rs.getInt("IDMEDIC");
-            String nom = rs.getString("NOM");
-            String desc = rs.getString("DESCRIPTION");
-            String code = rs.getString("CODE");
-            int quantite = rs.getInt("QUANTITE");
-            int unite = rs.getInt("UNITE");
-            Medicament medic = new Medicament(idmedic, nom, desc, code, quantite, unite);
-            lMedic.add(medic);
-            date = rs.getString("DATEP");
-            String annee = date.substring(0, 4);
-            String mois = date.substring(5, 7);
-            String jour = date.substring(8, 10);
-            date = jour + "/" + mois + "/" + annee;
-            int idmedec = rs.getInt("IDMED");
-            medec = medecDAO.read(idmedec);
-            int idpat = rs.getInt("IDPAT");
-            pat = patDAO.read(idpat);
-            Prescription presc = new Prescription.Builder().setIdPresc(idpresc).setDateP(date).setMedec(medec).setPat(pat).setLMedic(lMedic).build();
-            hPresc.add(presc);
+            lPresc.addAll(hPresc);
+            return lPresc;
         }
-        lPresc.addAll(hPresc);
-        return lPresc;
     }
-
 }

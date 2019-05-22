@@ -28,21 +28,22 @@ public class PatientDAO extends DAO<Patient> {
     @Override
     public List<Patient> read(String d) throws SQLException {
         List<Patient> lPat = new ArrayList<>();
-        PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM patient WHERE nom like UPPER(?) ");
-        pstm.setString(1, "%" + d + "%");
-        ResultSet rs = pstm.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt("IDPAT");
-            String nom = rs.getString("NOM");
-            String prenom = rs.getString("PRENOM");
-            String tel = rs.getString("TEL");
-            Patient p = new Patient(id, nom, prenom, tel);
-            lPat.add(p);
+        try (PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM patient WHERE nom like UPPER(?) ")) {
+            pstm.setString(1, "%" + d + "%");
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("IDPAT");
+                String nom = rs.getString("NOM");
+                String prenom = rs.getString("PRENOM");
+                String tel = rs.getString("TEL");
+                Patient p = new Patient(id, nom, prenom, tel);
+                lPat.add(p);
+            }
+            if (lPat.isEmpty()) {
+                throw new SQLException("Aucun patient correspond à cette recherche");
+            }
+            return lPat;
         }
-        if (lPat.isEmpty()) {
-            throw new SQLException("Aucun patient correspond à cette recherche");
-        }
-        return lPat;
     }
 
     /**
@@ -53,11 +54,12 @@ public class PatientDAO extends DAO<Patient> {
      */
     @Override
     public void create(Patient obj) throws SQLException {
-        PreparedStatement pstm1 = dbConnect.prepareStatement("insert into PATIENT (NOM, PRENOM, TEL)values(?,?,?)");
-        pstm1.setString(1, obj.getNomP().toUpperCase());
-        pstm1.setString(2, obj.getPrenomP());
-        pstm1.setString(3, obj.getTel());
-        pstm1.executeUpdate();
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement("insert into PATIENT (NOM, PRENOM, TEL)values(?,?,?)")) {
+            pstm1.setString(1, obj.getNomP().toUpperCase());
+            pstm1.setString(2, obj.getPrenomP());
+            pstm1.setString(3, obj.getTel());
+            pstm1.executeUpdate();
+        }
     }
 
     /**
@@ -68,12 +70,13 @@ public class PatientDAO extends DAO<Patient> {
      */
     @Override
     public void update(Patient obj) throws SQLException {
-        PreparedStatement pstm = dbConnect.prepareStatement("update PATIENT set NOM=?,PRENOM=?,TEL=? where IDPAT =?");
-        pstm.setString(1, obj.getNomP().toUpperCase());
-        pstm.setString(2, obj.getPrenomP());
-        pstm.setString(3, obj.getTel());
-        pstm.setInt(4, obj.getIdpat());
-        pstm.executeUpdate();
+        try (PreparedStatement pstm = dbConnect.prepareStatement("update PATIENT set NOM=?,PRENOM=?,TEL=? where IDPAT =?")) {
+            pstm.setString(1, obj.getNomP().toUpperCase());
+            pstm.setString(2, obj.getPrenomP());
+            pstm.setString(3, obj.getTel());
+            pstm.setInt(4, obj.getIdpat());
+            pstm.executeUpdate();
+        }
     }
 
     /**
@@ -84,9 +87,10 @@ public class PatientDAO extends DAO<Patient> {
      */
     @Override
     public void delete(Patient obj) throws SQLException {
-        PreparedStatement pstm1 = dbConnect.prepareStatement("DELETE from patient where IDPAT = ?");
-        pstm1.setInt(1, obj.getIdpat());
-        pstm1.executeUpdate();
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement("DELETE from patient where IDPAT = ?")) {
+            pstm1.setInt(1, obj.getIdpat());
+            pstm1.executeUpdate();
+        }
     }
 
     /**
@@ -123,16 +127,17 @@ public class PatientDAO extends DAO<Patient> {
      */
     @Override
     public Patient read(int idpat) throws SQLException {
-        PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM patient WHERE IDPAT = ? order by idpat");
-        pstm.setInt(1, idpat);
-        ResultSet rs = pstm.executeQuery();
-        if (rs.next()) {
-            String nom = rs.getString("NOM");
-            String prenom = rs.getString("PRENOM");
-            String tel = rs.getString("TEL");
-            return new Patient(idpat, nom, prenom, tel);
-        } else {
-            throw new SQLException("id du patient inconnu");
+        try (PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM patient WHERE IDPAT = ? order by idpat")) {
+            pstm.setInt(1, idpat);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                String nom = rs.getString("NOM");
+                String prenom = rs.getString("PRENOM");
+                String tel = rs.getString("TEL");
+                return new Patient(idpat, nom, prenom, tel);
+            } else {
+                throw new SQLException("id du patient inconnu");
+            }
         }
     }
 }

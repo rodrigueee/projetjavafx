@@ -70,4 +70,8 @@ public class MenuControleur implements ControleursInterface {
     public void setMod(ModeleDAO mod) {
     }
 
+    @Override
+    public void refreshListe() {
+    }
+
 }

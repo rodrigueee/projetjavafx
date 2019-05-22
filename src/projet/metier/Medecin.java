@@ -165,8 +165,10 @@ public class Medecin extends Sujet {
      * @param tel le numero de telephone du medecin
      */
     public void setTel(String tel) {
+        if (!this.tel.equals(tel)) {
+            notify("Je viens de changer de numéro : " + tel, this);
+        }
         this.tel = tel;
-        notify("Je viens de changer de numéro : " + tel, this);
     }
 
     /**

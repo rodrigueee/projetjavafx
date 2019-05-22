@@ -28,21 +28,22 @@ public class MedicamentDAO extends DAO<Medicament> {
     @Override
     public List<Medicament> read(String d) throws SQLException {
         List<Medicament> lMedic = new ArrayList<>();
-        PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM medicament WHERE description LIKE UPPER(?) order by description");
-        pstm.setString(1, "%" + d + "%");
-        ResultSet rs = pstm.executeQuery();
-        while (rs.next()) {
-            int id = rs.getInt("IDMEDIC");
-            String nom = rs.getString("NOM");
-            String description = rs.getString("DESCRIPTION");
-            String code = rs.getString("CODE");
-            Medicament med = new Medicament(id, nom, description, code);
-            lMedic.add(med);
+        try (PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM medicament WHERE description LIKE UPPER(?) order by description")) {
+            pstm.setString(1, "%" + d + "%");
+            ResultSet rs = pstm.executeQuery();
+            while (rs.next()) {
+                int id = rs.getInt("IDMEDIC");
+                String nom = rs.getString("NOM");
+                String description = rs.getString("DESCRIPTION");
+                String code = rs.getString("CODE");
+                Medicament med = new Medicament(id, nom, description, code);
+                lMedic.add(med);
+            }
+            if (lMedic.isEmpty()) {
+                throw new SQLException("Aucun médicament correspond à cette recherche");
+            }
+            return lMedic;
         }
-        if (lMedic.isEmpty()) {
-            throw new SQLException("Aucun médicament correspond à cette recherche");
-        }
-        return lMedic;
     }
 
     /**
@@ -53,11 +54,12 @@ public class MedicamentDAO extends DAO<Medicament> {
      */
     @Override
     public void create(Medicament obj) throws SQLException {
-        PreparedStatement pstm1 = dbConnect.prepareStatement("insert into MEDICAMENT (NOM, DESCRIPTION, CODE)values(?,?,?)");
-        pstm1.setString(1, obj.getNom());
-        pstm1.setString(2, obj.getDescription().toUpperCase());
-        pstm1.setString(3, obj.getCode());
-        pstm1.executeUpdate();
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement("insert into MEDICAMENT (NOM, DESCRIPTION, CODE)values(?,?,?)")) {
+            pstm1.setString(1, obj.getNom());
+            pstm1.setString(2, obj.getDescription().toUpperCase());
+            pstm1.setString(3, obj.getCode());
+            pstm1.executeUpdate();
+        }
     }
 
     /**
@@ -68,12 +70,13 @@ public class MedicamentDAO extends DAO<Medicament> {
      */
     @Override
     public void update(Medicament obj) throws SQLException {
-        PreparedStatement pstm = dbConnect.prepareStatement("update MEDICAMENT set NOM=?,DESCRIPTION=?,CODE=? where IDMEDIC=?");
-        pstm.setString(1, obj.getNom());
-        pstm.setString(2, obj.getDescription().toUpperCase());
-        pstm.setString(3, obj.getCode());
-        pstm.setInt(4, obj.getIdmedic());
-        pstm.executeUpdate();
+        try (PreparedStatement pstm = dbConnect.prepareStatement("update MEDICAMENT set NOM=?,DESCRIPTION=?,CODE=? where IDMEDIC=?")) {
+            pstm.setString(1, obj.getNom());
+            pstm.setString(2, obj.getDescription().toUpperCase());
+            pstm.setString(3, obj.getCode());
+            pstm.setInt(4, obj.getIdmedic());
+            pstm.executeUpdate();
+        }
     }
 
     /**
@@ -84,9 +87,10 @@ public class MedicamentDAO extends DAO<Medicament> {
      */
     @Override
     public void delete(Medicament obj) throws SQLException {
-        PreparedStatement pstm1 = dbConnect.prepareStatement("DELETE from medicament where IDMEDIC = ?");
-        pstm1.setInt(1, obj.getIdmedic());
-        pstm1.executeUpdate();
+        try (PreparedStatement pstm1 = dbConnect.prepareStatement("DELETE from medicament where IDMEDIC = ?")) {
+            pstm1.setInt(1, obj.getIdmedic());
+            pstm1.executeUpdate();
+        }
     }
 
     /**
@@ -123,16 +127,17 @@ public class MedicamentDAO extends DAO<Medicament> {
      */
     @Override
     public Medicament read(int idmedic) throws SQLException {
-        PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM medicament WHERE IDMEDIC = ? order by idmedic");
-        pstm.setInt(1, idmedic);
-        ResultSet rs = pstm.executeQuery();
-        if (rs.next()) {
-            String nom = rs.getString("NOM");
-            String desc = rs.getString("DESCRIPTION");
-            String code = rs.getString("CODE");
-            return new Medicament(idmedic, nom, desc, code);
-        } else {
-            throw new SQLException("Id du médicament inconnu");
+        try (PreparedStatement pstm = dbConnect.prepareStatement("SELECT * FROM medicament WHERE IDMEDIC = ? order by idmedic")) {
+            pstm.setInt(1, idmedic);
+            ResultSet rs = pstm.executeQuery();
+            if (rs.next()) {
+                String nom = rs.getString("NOM");
+                String desc = rs.getString("DESCRIPTION");
+                String code = rs.getString("CODE");
+                return new Medicament(idmedic, nom, desc, code);
+            } else {
+                throw new SQLException("Id du médicament inconnu");
+            }
         }
     }
 }

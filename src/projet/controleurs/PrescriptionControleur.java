@@ -5,18 +5,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Orientation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
@@ -24,7 +20,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 import main.Main;
 import projet.metier.Medecin;
 import projet.metier.Medicament;
@@ -231,16 +226,15 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
             try {
                 Prescription p = new Prescription.Builder().setDateP(dateAj.getText()).setMedec(medec).setPat(pat).setLMedic(listeMedic).build();
                 mod.ajouterPresc(p);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Prescription ajoutée");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Prescription ajoutée");
+                info.show();
                 dateAj.clear();
                 medecAj.getSelectionModel().clearSelection();
                 patAj.getSelectionModel().clearSelection();
                 listeMedicAj.getSelectionModel().clearSelection();
                 refreshListe();
-                mainControleur.mdControleur.refreshListe();
             } catch (SQLException e) {
                 Alert erreur = new Alert(Alert.AlertType.ERROR);
                 erreur.setTitle(Main.title);
@@ -277,10 +271,10 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
             p.setDateP(date.getText());
             try {
                 mod.modifPresc(p);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Prescription modifié");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Prescription modifié");
+                info.show();
                 refreshListe();
             } catch (SQLException e) {
                 p.setDateP(d);
@@ -315,12 +309,11 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
         if (result.get() == ButtonType.OK) {
             try {
                 mod.suppPresc(p);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Prescription supprimé");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Prescription supprimé");
+                info.show();
                 refreshListe();
-                mainControleur.mdControleur.refreshListe();
             } catch (SQLException e) {
                 Alert erreur = new Alert(Alert.AlertType.ERROR);
                 erreur.setTitle(Main.title);
@@ -417,6 +410,7 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
      * necessaire
      */
     @FXML
+    @Override
     public void refreshListe() {
         try {
             retourBtn.setVisible(false);
@@ -438,7 +432,7 @@ public class PrescriptionControleur implements Initializable, ControleursInterfa
             Alert erreur = new Alert(Alert.AlertType.ERROR);
             erreur.setTitle(Main.title);
             erreur.setHeaderText("Erreur de lecture des prescriptions");
-            System.out.println(ex.getMessage() + "\n" + ex.getCause());
+            System.out.println(ex.getMessage());
             erreur.show();
             accueil();
         }

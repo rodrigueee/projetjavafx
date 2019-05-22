@@ -133,10 +133,10 @@ public class MedicamentControleur implements Initializable, ControleursInterface
             Medicament m = new Medicament(nomAj.getText(), descAj.getText(), codeAj.getText());
             try {
                 mod.ajouterMedic(m);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Médicament ajouté");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Médicament ajouté");
+                info.show();
                 codeAj.clear();
                 nomAj.clear();
                 descAj.clear();
@@ -175,10 +175,10 @@ public class MedicamentControleur implements Initializable, ControleursInterface
             m.setDescription(desc.getText());
             try {
                 mod.modifMedic(m);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Médicament modifié");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Médicament modifié");
+                info.show();
                 refreshListe();
             } catch (SQLException e) {
                 m.setCode(c);
@@ -215,10 +215,10 @@ public class MedicamentControleur implements Initializable, ControleursInterface
         if (result.get() == ButtonType.OK) {
             try {
                 mod.suppMedic(m);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Médicament supprimé");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Médicament supprimé");
+                info.show();
                 refreshListe();
             } catch (SQLException e) {
                 Alert erreur = new Alert(Alert.AlertType.ERROR);
@@ -335,6 +335,7 @@ public class MedicamentControleur implements Initializable, ControleursInterface
      * necessaire
      */
     @FXML
+    @Override
     public void refreshListe() {
         retourBtn.setVisible(false);
         medicTable.getSelectionModel().clearSelection();

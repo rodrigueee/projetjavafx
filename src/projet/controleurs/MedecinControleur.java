@@ -141,10 +141,10 @@ public class MedecinControleur implements Initializable, ControleursInterface {
             Medecin m = new Medecin(nomAj.getText(), prenomAj.getText(), matAj.getText(), telAj.getText());
             try {
                 mod.ajouterMedecin(m);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Medecin ajouté");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Medecin ajouté");
+                info.show();
                 nomAj.clear();
                 prenomAj.clear();
                 matAj.clear();
@@ -186,10 +186,10 @@ public class MedecinControleur implements Initializable, ControleursInterface {
             m.setTel(tel.getText());
             try {
                 mod.modifMedec(m);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Medecin modifié");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Medecin modifié");
+                info.show();
                 refreshListe();
             } catch (SQLException e) {
                 m.setNomM(n);
@@ -227,10 +227,10 @@ public class MedecinControleur implements Initializable, ControleursInterface {
         if (result.get() == ButtonType.OK) {
             try {
                 mod.suppMedec(m);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Medecin supprimé");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Medecin supprimé");
+                info.show();
                 refreshListe();
             } catch (SQLException e) {
                 Alert erreur = new Alert(Alert.AlertType.ERROR);
@@ -255,6 +255,7 @@ public class MedecinControleur implements Initializable, ControleursInterface {
         recherche.setHeaderText("Recherche sur l'id ou le nom :");
         recherche.setContentText("Id ou nom:");
 
+        //il montre la pop up de recherche, attend un resultat qui est optionnel, ensuite on test s'il est present ou pas
         Optional<String> result = recherche.showAndWait();
 
         //LAMBDA
@@ -350,6 +351,7 @@ public class MedecinControleur implements Initializable, ControleursInterface {
      * necessaire
      */
     @FXML
+    @Override
     public void refreshListe() {
         retourBtn.setVisible(false);
         medecTable.getSelectionModel().clearSelection();

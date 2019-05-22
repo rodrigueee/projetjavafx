@@ -147,10 +147,10 @@ public class PatientControleur implements Initializable, ControleursInterface {
             Patient p = new Patient(nomAj.getText(), prenomAj.getText(), telAj.getText());
             try {
                 mod.ajouterPatient(p);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Patient ajouté");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Patient ajouté");
+                info.show();
                 nomAj.clear();
                 prenomAj.clear();
                 telAj.clear();
@@ -189,10 +189,10 @@ public class PatientControleur implements Initializable, ControleursInterface {
             p.setTel(tel.getText());
             try {
                 mod.modifPat(p);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Patient modifié");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Patient modifié");
+                info.show();
                 refreshListe();
             } catch (SQLException e) {
                 p.setNomP(n);
@@ -229,10 +229,10 @@ public class PatientControleur implements Initializable, ControleursInterface {
         if (result.get() == ButtonType.OK) {
             try {
                 mod.suppPat(p);
-                Alert erreur = new Alert(Alert.AlertType.INFORMATION);
-                erreur.setTitle(Main.title);
-                erreur.setHeaderText("Patient supprimé");
-                erreur.show();
+                Alert info = new Alert(Alert.AlertType.INFORMATION);
+                info.setTitle(Main.title);
+                info.setHeaderText("Patient supprimé");
+                info.show();
                 refreshListe();
             } catch (SQLException e) {
                 Alert erreur = new Alert(Alert.AlertType.ERROR);
@@ -396,6 +396,7 @@ public class PatientControleur implements Initializable, ControleursInterface {
      * necessaire
      */
     @FXML
+    @Override
     public void refreshListe() {
         retourBtn.setVisible(false);
         patTable.getSelectionModel().clearSelection();

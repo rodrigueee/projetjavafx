@@ -209,10 +209,11 @@ public class Patient extends Observer {
      * methode qui notifie le changement du numero de tel du medecin de ce patient
      * @param notif message à notifié
      * @param md le medecin qui à changé de modifier
+     * @return le message de notification
      */
     @Override
-    public void observe(String notif, Medecin md) {
-        System.out.println(prenomP + " " + nomP + " à été notifié par le médecin : " + md.getNomM() + " " + md.getPrenomM() + " de : " + notif);
+    public String observe(String notif, Medecin md) {
+        return prenomP + " " + nomP + " à été notifié par le médecin : " + md.getNomM() + " " + md.getPrenomM() + " de : " + notif;
     }
 
 }
